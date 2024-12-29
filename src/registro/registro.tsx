@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, DatePicker, Typography, Row, Col, message, Modal } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom'; // Usamos useNavigate en lugar de useHistory
+import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 
 const { Title } = Typography;
@@ -9,25 +9,24 @@ const { Title } = Typography;
 const RegistroCliente: React.FC = () => {
   const [form] = Form.useForm();
   const [isFormChanged, setIsFormChanged] = useState(false);
-  const navigate = useNavigate(); // Cambiado de useHistory a useNavigate
+  const navigate = useNavigate(); 
 
-  // Maneja los cambios en los valores del formulario
   const onValuesChange = (changedValues: any, allValues: any) => {
-    setIsFormChanged(true);  // Marca como cambiado si hay algún cambio en el formulario
+    setIsFormChanged(true);  
   };
 
   const handleGoBack = () => {
-    // Si el formulario tiene cambios no guardados, preguntar al usuario si desea ir atrás
+  
     if (isFormChanged) {
       Modal.confirm({
         title: 'Confirmar',
         content: '¿Estás seguro de que deseas regresar sin guardar los cambios?',
         onOk: () => {
-          navigate('/'); // Redirige a la página principal usando navigate
+          navigate('/'); 
         },
       });
     } else {
-      navigate('/'); // Si no hay cambios, solo redirige
+      navigate('/'); 
     }
   };
 
@@ -38,8 +37,7 @@ const RegistroCliente: React.FC = () => {
     };
     console.log('Submitted values:', formattedValues);
     message.success('Cuenta creada con éxito');
-    // Opcionalmente, puedes redirigir a otra página después del submit
-    navigate('/');  // Redirige a la página principal después de enviar el formulario
+    navigate('/');  
   };
 
   return (
@@ -53,7 +51,7 @@ const RegistroCliente: React.FC = () => {
           left: '20px', 
           fontSize: '24px', 
           cursor: 'pointer',
-          zIndex: 1000 // Asegura que el icono esté por encima de otros elementos
+          zIndex: 1000 
         }} 
       />
       
