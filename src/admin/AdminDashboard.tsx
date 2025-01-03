@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import FlightsManagement from "./FlightsCrud";
+import FlightsManagement from "./FlightsManagement";
 import AirlinesCreation from "./AirlinesCreation";
 import ReservationsView from "./ReservationsView";
 import "./AdminDashboard.css"; // Archivo de estilos
