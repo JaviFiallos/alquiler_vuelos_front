@@ -12,7 +12,7 @@ const Login: React.FC = () => {
 
     const handleRegisterClick = () => {
         navigate('/register');  // Redirige a la ruta /register
-      };
+        };
 
     return (
         <div className="login-container">
