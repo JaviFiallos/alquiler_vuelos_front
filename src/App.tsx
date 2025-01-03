@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./login/login";
 import RegistroCliente from "./registro/registro";
 import FlightsCrud from "./admin/FlightsCrud";
-import CreateAirlines from "./admin/CreateAirlines";
+import CreateAirlines from "./admin/AirlinesCreation";
 import ViewReservations from "./admin/ViewReservations";
 
 function App() {
