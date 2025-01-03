@@ -12,7 +12,7 @@ const AirlinesCreation: React.FC = () => {
   // Simulación de datos del backend
   useEffect(() => {
     const fetchAirlines = async () => {
-      // Aquí tu compañero conectará el backend
+      // Aquí se deberá conectar con el backend para obtener los datos
       const response = await fetch("/api/airlines");
       const data = await response.json();
       setAirlines(data);

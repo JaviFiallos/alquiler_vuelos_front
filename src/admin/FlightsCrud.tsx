@@ -31,7 +31,7 @@ const FlightsCrud: React.FC = () => {
 
   // Simulación de datos del backend
   useEffect(() => {
-    // Aquí tu compañero conectará el backend
+    // Aquí se deberá conectar con el backend para obtener los datos
     const fetchFlights = async () => {
       const response = await fetch("/api/flights");
       const data = await response.json();

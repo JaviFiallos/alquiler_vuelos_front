@@ -1,9 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./login/login";
 import RegistroCliente from "./registro/registro";
-import FlightsCrud from "./admin/FlightsCrud";
-import CreateAirlines from "./admin/AirlinesCreation";
-import ViewReservations from "./admin/ViewReservations";
+import AdminDashboard from "./admin/AdminDashboard"; // Importa el nuevo contenedor del panel admin
 
 function App() {
   return (
@@ -12,14 +10,12 @@ function App() {
         {/* Ruta pública para login */}
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<RegistroCliente />} />
-        <Route path="/admin/flights" element={<FlightsCrud />} />
-        <Route path="/admin/airlines" element={<CreateAirlines />} />
-        <Route path="/admin/reservations" element={<ViewReservations />} />
-        {/* Rutas protegidas dentro del MainLayout */}
-
+        
+        {/* Ruta para el panel de administración */}
+        <Route path="/admin/*" element={<AdminDashboard />} />
       </Routes>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;
