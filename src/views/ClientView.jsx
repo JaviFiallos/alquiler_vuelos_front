@@ -23,7 +23,7 @@ const ClientView = () => {
       flightId: 2,
       airline: "Avianca",
       originAirportId: 2,
-      destinationAirportId: 1,
+      destinationAirportId: 4,
       departureDate: "2025-01-06T14:00:00",
       arrivalDate: "2025-01-06T16:30:00",
       price: 450.0,
