@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./login/login";
 import RegistroCliente from "./registro/registro";
 import AdminDashboard from "./admin/AdminDashboard"; // Importa el nuevo contenedor del panel admin
+import Dashboard from "./home/dasboard";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         
         {/* Ruta para el panel de administración */}
         <Route path="/admin/*" element={<AdminDashboard />} />
+        <Route path="/dashboard*" element={<Dashboard />} />
       </Routes>
     </Router>
   );
