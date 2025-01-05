@@ -114,7 +114,7 @@ interface Reservation {
     flight: string;
     date: string;
     seats: number;
-    status: string; // "completed" o "active"
+    status: string; // "completed" o "active" 
     total: number;
 }
 
