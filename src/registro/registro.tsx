@@ -3,58 +3,63 @@ import { Form, Input, Button, DatePicker, Typography, Row, Col, message, Modal }
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
+import { createClient } from '../services/auth.service';
 
 const { Title } = Typography;
 
 const RegistroCliente: React.FC = () => {
   const [form] = Form.useForm();
   const [isFormChanged, setIsFormChanged] = useState(false);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
-  const onValuesChange = (changedValues: any, allValues: any) => {
-    setIsFormChanged(true);  
+  const onValuesChange = () => {
+    setIsFormChanged(true);
   };
 
   const handleGoBack = () => {
-  
     if (isFormChanged) {
       Modal.confirm({
         title: 'Confirmar',
         content: '¿Estás seguro de que deseas regresar sin guardar los cambios?',
         onOk: () => {
-          navigate('/'); 
+          navigate('/');
         },
       });
     } else {
-      navigate('/'); 
+      navigate('/');
     }
   };
 
-  const onFinish = (values: any) => {
+  const onFinish = async (values: any) => {
     const formattedValues = {
       ...values,
-      birthDate: values.birthDate.format('YYYY-MM-DD'),
+      birthDate: `/Date(${values.birthDate.valueOf()})/`
     };
-    console.log('Submitted values:', formattedValues);
-    message.success('Cuenta creada con éxito');
-    navigate('/');  
+
+    try {
+      await createClient(formattedValues);
+      message.success('Cuenta creada con éxito');
+      navigate('/');
+    } catch (error) {
+      message.error('Error al crear la cuenta. Por favor, inténtalo de nuevo.');
+      console.error(error);
+    }
   };
 
   return (
     <div style={{ maxWidth: 600, margin: '0 auto', padding: '20px', position: 'relative' }}>
-      {/* Icono de regresar fijo en la parte superior izquierda */}
-      <ArrowLeftOutlined 
-        onClick={handleGoBack} 
-        style={{ 
-          position: 'fixed', 
-          top: '20px', 
-          left: '20px', 
-          fontSize: '24px', 
+      <ArrowLeftOutlined
+        onClick={handleGoBack}
+        style={{
+          position: 'fixed',
+          top: '20px',
+          left: '20px',
+          fontSize: '24px',
           cursor: 'pointer',
-          zIndex: 1000 
-        }} 
+          zIndex: 1000,
+        }}
       />
-      
+
       <div style={{ marginTop: '50px' }}>
         <Title level={2} style={{ textAlign: 'center', marginBottom: '20px' }}>
           FLY WITH US
@@ -64,13 +69,13 @@ const RegistroCliente: React.FC = () => {
           form={form}
           layout="vertical"
           onFinish={onFinish}
-          onValuesChange={onValuesChange}  // Aquí es donde definimos el onValuesChange
+          onValuesChange={onValuesChange}
           initialValues={{ birthDate: moment() }}
         >
           <Row gutter={60}>
             <Col span={12}>
               <Form.Item
-                label="DNI"
+                label="C. I."
                 name="dni"
                 rules={[{ required: true, message: 'Por favor, introduce el DNI.' }]}
               >
@@ -108,6 +113,28 @@ const RegistroCliente: React.FC = () => {
               </Form.Item>
             </Col>
           </Row>
+
+          <Form.Item
+            label="Correo Electrónico"
+            name="email"
+            rules={[
+              { required: true, message: 'Por favor, introduce tu correo electrónico.' },
+              { type: 'email', message: 'Por favor, introduce un correo electrónico válido.' },
+            ]}
+          >
+            <Input maxLength={50} placeholder="Introduce tu correo electrónico" />
+          </Form.Item>
+
+          <Form.Item
+            label="Contraseña"
+            name="password"
+            rules={[
+              { required: true, message: 'Por favor, introduce tu contraseña.' },
+              { min: 6, message: 'La contraseña debe tener al menos 6 caracteres.' },
+            ]}
+          >
+            <Input.Password maxLength={50} placeholder="Introduce tu contraseña" />
+          </Form.Item>
 
           <Form.Item>
             <Button type="primary" htmlType="submit" style={{ width: '100%' }}>

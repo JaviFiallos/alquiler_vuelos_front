@@ -10,13 +10,6 @@ const Login: React.FC = () => {
     const [loading, setLoading] = useState(false);  // Estado de carga
     const navigate = useNavigate();
 
-    // Datos estáticos emulando respuesta del backend
-    const user = {
-        email: "user@example.com",
-        password: "password123",
-        role: 2, // 1 = admin, 2 = client
-    };
-
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
