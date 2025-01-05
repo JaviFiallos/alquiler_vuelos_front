@@ -18,23 +18,8 @@ const Login: React.FC = () => {
         navigate('/register');
     };
 
-    const validateEmail = (email: string): boolean => {
-        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        return regex.test(email);
-    };
-
     const handleLogin = async (values: { email: string; password: string }) => {
         const { email, password } = values;
-
-        if (!validateEmail(email)) {
-            message.error('Por favor ingresa un correo electrónico válido.');
-            return;
-        }
-
-        if (password.length < 6) {
-            message.error('La contraseña debe tener al menos 6 caracteres.');
-            return;
-        }
 
         setLoading(true);  // Empieza el proceso de carga
 
