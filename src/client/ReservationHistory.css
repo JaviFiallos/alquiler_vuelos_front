@@ -1,0 +1,62 @@
+.reservation-history {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.reservations-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.reservations-table th,
+.reservations-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+.reservations-table th {
+    background-color: #000000;
+}
+
+.reservations-table tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.btn {
+    padding: 5px 10px;
+    font-size: 14px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-modify {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-cancel {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-modify:hover {
+    background-color: #0056b3;
+}
+
+.btn-cancel:hover {
+    background-color: #c82333;
+}
+
+.no-actions {
+    color: #888;
+    font-style: italic;
+}
