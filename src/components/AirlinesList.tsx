@@ -1,9 +1,28 @@
 import React from "react";
 import { Card, CardContent, Typography } from "@mui/material";
 
-const AirlinesList = ({ selectedOrigin, selectedDestination, onAirlineSelect }) => {
+// Definición de tipos
+interface Airport {
+  airportId: number;
+  airport: string;
+}
+
+interface Airline {
+  airlineId: number;
+  airline: string;
+  originAirportId: number;
+  destinationAirportId: number;
+}
+
+interface AirlinesListProps {
+  selectedOrigin: Airport;
+  selectedDestination: Airport;
+  onAirlineSelect: (airline: Airline) => void;
+}
+
+const AirlinesList: React.FC<AirlinesListProps> = ({ selectedOrigin, selectedDestination, onAirlineSelect }) => {
   // Lista de aerolíneas de ejemplo
-  const airlines = [
+  const airlines: Airline[] = [
     { airlineId: 1, airline: "LATAM Airlines", originAirportId: 1, destinationAirportId: 2 },
     { airlineId: 2, airline: "Avianca", originAirportId: 2, destinationAirportId: 1 },
     { airlineId: 3, airline: "American Airlines", originAirportId: 3, destinationAirportId: 4 },

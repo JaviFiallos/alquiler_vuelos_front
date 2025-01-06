@@ -2,7 +2,7 @@ import React from "react";
 import { Layout } from "antd";
 import FlightReservations from "../reservation/catalog";
 
-const { Content, Footer } = Layout;
+const { Content } = Layout;
 
 const Home: React.FC = () => {
   return (
@@ -24,6 +24,7 @@ const Home: React.FC = () => {
         </div>
       </div>
     </Content>
+    
   );
 };
 
