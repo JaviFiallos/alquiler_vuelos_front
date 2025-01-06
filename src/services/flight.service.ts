@@ -19,16 +19,16 @@ export const createFlight = async (vehicleData: any): Promise<any> => {
         const response = await api.post(`/FlightService.svc/flights`, vehicleData);
         return response.data;
     } catch (error) {
-        throw new Error("Error al crear el vehículo");
+        throw new Error("Error al crear el vuelo");
     }
 };
 
-export const updateFlight = async (vehicleId: number, vehicleData: any): Promise<any> => {
+export const updateFlight = async (flightId: number, data: any): Promise<any> => {
     try {
-        const response = await api.put(`/FlightService.svc/flights/${vehicleId}`, vehicleData);
+        const response = await api.put(`/FlightService.svc/flights/${flightId}`, data);
         return response.data;
     } catch (error) {
-        throw new Error("Error al crear el vehículo");
+        throw new Error("Error al modificar el vuelo");
     }
 };
 
