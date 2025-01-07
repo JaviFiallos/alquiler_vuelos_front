@@ -137,28 +137,44 @@ const FlightsManagement: React.FC = () => {
       title: "Aerolínea",
       dataIndex: ["airlineId", "airline"],
       key: "airlineId",
+      onHeaderCell: () => ({
+        style: { backgroundColor: 'black', color: 'white' },
+      }),
     },
+    
     {
       title: "Origen",
       dataIndex: ["originAirportId", "cityId", "city"],
       key: "originAirportId",
+      onHeaderCell: () => ({
+        style: { backgroundColor: 'black', color: 'white' },
+      }),
     },
     {
       title: "Destino",
       dataIndex: ["destinationAirportId", "cityId", "city"],
       key: "destinationAirportId",
+      onHeaderCell: () => ({
+        style: { backgroundColor: 'black', color: 'white' },
+      }),
     },
     {
       title: "Salida",
       dataIndex: "departureDate",
       key: "departureDate",
       render: (date: any) => dayjs(date).format("YYYY-MM-DD HH:mm"),
+      onHeaderCell: () => ({
+        style: { backgroundColor: 'black', color: 'white' },
+      }),
     },
     {
       title: "Llegada Estimada",
       dataIndex: "arrivalDate",
       key: "arrivalDate",
       render: (date: any) => dayjs(date).format("YYYY-MM-DD HH:mm"),
+      onHeaderCell: () => ({
+        style: { backgroundColor: 'black', color: 'white' },
+      }),
     },
     {
       title: "Acciones",
@@ -170,6 +186,9 @@ const FlightsManagement: React.FC = () => {
           <Button type="link" icon={<DeleteOutlined />} danger />
         </>
       ),
+      onHeaderCell: () => ({
+        style: { backgroundColor: 'black', color: 'white' },
+      }),
     },
   ];
 

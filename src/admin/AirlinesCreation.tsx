@@ -88,6 +88,10 @@ const AirlinesCreation: React.FC = () => {
       key: "airline",
       width: 200,
       ellipsis: true,
+      render: (text: string) => <span>{text}</span>,
+      onHeaderCell: () => ({
+        style: { backgroundColor: 'black', color: 'white' },
+      }),
     },
     {
       title: "Código",
@@ -95,6 +99,9 @@ const AirlinesCreation: React.FC = () => {
       key: "code",
       width: 100,
       ellipsis: true,
+      onHeaderCell: () => ({
+        style: { backgroundColor: 'black', color: 'white' },
+      }),
     },
     {
       title: "Acciones",
@@ -105,69 +112,73 @@ const AirlinesCreation: React.FC = () => {
           Editar
         </Button>
       ),
+      // Estilo para el encabezado
+      onHeaderCell: () => ({
+        style: { backgroundColor: 'black', color: 'white' },
+      }),
     },
   ];
 
   return (
     <div>
-        <h2 className="title" style={{ textAlign: "center", marginBottom: "20px" }}>
-          Gestión de Aerolíneas
-        </h2>
-        <Button type="primary" onClick={() => openModal()} loading={loadingButton}>
-          Agregar Aerolínea
-        </Button>
-        <Table
-          dataSource={airlines}
-          columns={columns}
-          rowKey="airlineId"
-          style={{ marginTop: "20px" }}
-          loading={loading}
-          pagination={{
-            current: pagination.current,
-            pageSize: pagination.pageSize,
-            total: pagination.total,
-            onChange: handlePaginationChange,
-            showSizeChanger: false,
+      <h2 className="title" style={{ textAlign: "center", marginBottom: "20px" }}>
+        Gestión de Aerolíneas
+      </h2>
+      <Button type="primary" onClick={() => openModal()} loading={loadingButton}>
+        Agregar Aerolínea
+      </Button>
+      <Table
+        dataSource={airlines}
+        columns={columns}
+        rowKey="airlineId"
+        style={{ marginTop: "20px" }}
+        loading={loading}
+        pagination={{
+          current: pagination.current,
+          pageSize: pagination.pageSize,
+          total: pagination.total,
+          onChange: handlePaginationChange,
+          showSizeChanger: false,
+        }}
+      />
+      <Modal
+        title={isEditing ? "Editar Aerolínea" : "Agregar Aerolínea"}
+        open={modalOpen}
+        onCancel={closeModal}
+        footer={null}
+        width={500} // Ajuste el ancho del modal
+      >
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleSubmit}
+          initialValues={{
+            airline: currentAirline?.airline || "",
+            code: currentAirline?.code || "",
           }}
-        />
-        <Modal
-          title={isEditing ? "Editar Aerolínea" : "Agregar Aerolínea"}
-          open={modalOpen}
-          onCancel={closeModal}
-          footer={null}
-          width={500} // Ajuste el ancho del modal
         >
-          <Form
-            form={form}
-            layout="vertical"
-            onFinish={handleSubmit}
-            initialValues={{
-              airline: currentAirline?.airline || "",
-              code: currentAirline?.code || "",
-            }}
+          <Form.Item
+            label="Nombre de la Aerolínea"
+            name="airline"
+            rules={[{ required: true, message: "Por favor ingrese el nombre" }]}
           >
-            <Form.Item
-              label="Nombre de la Aerolínea"
-              name="airline"
-              rules={[{ required: true, message: "Por favor ingrese el nombre" }]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label="Código de la Aerolínea"
-              name="code"
-              rules={[{ required: true, message: "Por favor ingrese el código" }]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit" loading={loadingButton}>
-                {isEditing ? "Actualizar" : "Agregar"} Aerolínea
-              </Button>
-            </Form.Item>
-          </Form>
-        </Modal>
-        </div>
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Código de la Aerolínea"
+            name="code"
+            rules={[{ required: true, message: "Por favor ingrese el código" }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit" loading={loadingButton}>
+              {isEditing ? "Actualizar" : "Agregar"} Aerolínea
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
+    </div>
   );
 };
 
