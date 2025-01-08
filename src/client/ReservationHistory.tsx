@@ -1,237 +1,262 @@
-//FUNCIONAL--------------------------------------------------------------------------------------
-
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-// import "./ReservationHistory.css";
-
-// interface Reservation {
-//     id: number;
-//     flight: string;
-//     date: string;
-//     seats: number;
-//     status: string; // "completed" o "active"
-//     total: number;
-// }
-
-// const ReservationHistory: React.FC = () => {
-//     const [reservations, setReservations] = useState<Reservation[]>([]);
-
-//     useEffect(() => {
-//         // Llamada al backend para cargar las reservas del cliente
-//         axios.get("/api/client/reservations").then((response) => {
-//             setReservations(response.data);
-//         });
-//     }, []);
-
-//     // Manejar la cancelación de una reserva
-//     const handleCancel = (id: number) => {
-//         if (confirm("¿Está seguro de que desea cancelar esta reserva?")) {
-//             axios.delete(`/api/client/reservations/${id}`).then(() => {
-//                 setReservations((prev) => prev.filter((res) => res.id !== id));
-//             });
-//         }
-//     };
-
-//     // Manejar la modificación de una reserva
-//     const handleModify = (id: number) => {
-//         const newSeats = prompt("Ingrese la nueva cantidad de asientos:");
-//         if (newSeats && parseInt(newSeats) > 0) {
-//             axios.put(`/api/client/reservations/${id}`, { seats: parseInt(newSeats) }).then(() => {
-//                 setReservations((prev) =>
-//                     prev.map((res) =>
-//                         res.id === id ? { ...res, seats: parseInt(newSeats), total: res.total / res.seats * parseInt(newSeats) } : res
-//                     )
-//                 );
-//             });
-//         }
-//     };
-
-//     return (
-//         <div className="reservation-history">
-//             <h2 className="title">Historial de Reservas</h2>
-//             <table className="reservations-table">
-//                 <thead>
-//                     <tr>
-//                         <th>Vuelo</th>
-//                         <th>Fecha</th>
-//                         <th>Asientos</th>
-//                         <th>Total</th>
-//                         <th>Estado</th>
-//                         <th>Acciones</th>
-//                     </tr>
-//                 </thead>
-//                 <tbody>
-//                     {reservations.map((reservation) => (
-//                         <tr key={reservation.id}>
-//                             <td>{reservation.flight}</td>
-//                             <td>{reservation.date}</td>
-//                             <td>{reservation.seats}</td>
-//                             <td>${reservation.total.toFixed(2)}</td>
-//                             <td>{reservation.status === "completed" ? "Completada" : "Activa"}</td>
-//                             <td>
-//                                 {reservation.status === "active" && (
-//                                     <>
-//                                         <button
-//                                             className="btn btn-modify"
-//                                             onClick={() => handleModify(reservation.id)}
-//                                         >
-//                                             Modificar
-//                                         </button>
-//                                         <button
-//                                             className="btn btn-cancel"
-//                                             onClick={() => handleCancel(reservation.id)}
-//                                         >
-//                                             Cancelar
-//                                         </button>
-//                                     </>
-//                                 )}
-//                                 {reservation.status === "completed" && (
-//                                     <span className="no-actions">-</span>
-//                                 )}
-//                             </td>
-//                         </tr>
-//                     ))}
-//                 </tbody>
-//             </table>
-//         </div>
-//     );
-// };
-
-// export default ReservationHistory;
-
-
-
-
-
-
-//DATOS SIMULADOS--------------------------------------------------------------------------------------
-
 import React, { useEffect, useState } from "react";
-import "./ReservationHistory.css";
+import { IReservation } from "../types/IReservation";
+import { cancelReservation, getReservationsByClient, updateReservation } from "../services/reservation.service";
+import { getUserId } from "../utils/utils";
+import { Table, Button, Modal, Space, Typography, Divider, Form, InputNumber, message } from "antd";
+import {
+    EditOutlined,
+    DeleteOutlined,
+    InfoCircleOutlined,
+    CalendarOutlined,
+    DollarCircleOutlined,
+    CompassOutlined,
+    ArrowRightOutlined,
+} from "@ant-design/icons";
+import { IFlight } from "../types/IFlight";
 
-interface Reservation {
-    id: number;
-    flight: string;
-    date: string;
-    seats: number;
-    status: string; // "completed" o "active" 
-    total: number;
-}
+const { Title } = Typography;
+
+const parseDate = (dateString: any) => {
+    const timestamp = parseInt(dateString.match(/\d+/)[0], 10);
+    return new Date(timestamp).toLocaleString();
+};
 
 const ReservationHistory: React.FC = () => {
-    const [reservations, setReservations] = useState<Reservation[]>([]);
+    const [reservations, setReservations] = useState<IReservation[]>([]);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [selectedReservation, setSelectedReservation] = useState<IReservation | null>(null);
+    const [editModalVisible, setEditModalVisible] = useState(false);
+    const [cancelModalVisible, setCancelModalVisible] = useState(false);
+    const [currentReservationId, setCurrentReservationId] = useState<number | null>(null);
+    const [form] = Form.useForm();
+
+    const fetchReservations = async () => {
+        try {
+            const data = await getReservationsByClient(getUserId()!);
+            setReservations(data);
+        } catch (error) {
+            console.error("Error al cargar las reservas", error);
+        }
+    };
 
     useEffect(() => {
-        // Datos simulados
-        const mockData: Reservation[] = [
-            {
-                id: 1,
-                flight: "Vuelo 123 - Quito a Guayaquil",
-                date: "2025-01-10 15:30",
-                seats: 2,
-                status: "active",
-                total: 150.0,
-            },
-            {
-                id: 2,
-                flight: "Vuelo 456 - Guayaquil a Cuenca",
-                date: "2025-01-12 12:00",
-                seats: 1,
-                status: "completed",
-                total: 75.0,
-            },
-            {
-                id: 3,
-                flight: "Vuelo 789 - Cuenca a Quito",
-                date: "2025-01-15 18:00",
-                seats: 3,
-                status: "active",
-                total: 225.0,
-            },
-            {
-                id: 4,
-                flight: "Vuelo 475 - Cuenca a Quito",
-                date: "2025-01-15 18:00",
-                seats: 3,
-                status: "active",
-                total: 225.0,
-            },
-        ];
-
-        setReservations(mockData);
+        fetchReservations();
     }, []);
 
+    const handleModify = (id: number) => {
+        setCurrentReservationId(id);
+        setEditModalVisible(true);
+    };
+
     const handleCancel = (id: number) => {
-        if (confirm("¿Está seguro de que desea cancelar esta reserva?")) {
-            setReservations((prev) => prev.filter((res) => res.id !== id));
+        setCurrentReservationId(id);
+        setCancelModalVisible(true);
+    };
+
+    const submitModify = async (values: { seats: number }) => {
+        if (currentReservationId) {
+            try {
+                await updateReservation(currentReservationId, { numberOfPassengers: values.seats });
+                message.success("Reserva modificada con éxito.");
+                fetchReservations();
+                setEditModalVisible(false);
+            } catch (error) {
+                console.error("Error al modificar la reserva", error);
+                message.error("No se pudo modificar la reserva.");
+            }
         }
     };
 
-    const handleModify = (id: number) => {
-        const newSeats = prompt("Ingrese la nueva cantidad de asientos:");
-        if (newSeats && parseInt(newSeats) > 0) {
-            setReservations((prev) =>
-                prev.map((res) =>
-                    res.id === id
-                        ? { ...res, seats: parseInt(newSeats), total: res.total / res.seats * parseInt(newSeats) }
-                        : res
-                )
-            );
+    const confirmCancel = async () => {
+        if (currentReservationId) {
+            try {
+                await cancelReservation(currentReservationId);
+                message.success("Reserva cancelada con éxito.");
+                fetchReservations();
+                setCancelModalVisible(false);
+            } catch (error) {
+                console.error("Error al cancelar la reserva", error);
+                message.error("No se pudo cancelar la reserva.");
+            }
         }
     };
+
+    const showFlightInfo = (reservation: IReservation) => {
+        setSelectedReservation(reservation);
+        setIsModalVisible(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalVisible(false);
+        setSelectedReservation(null);
+    };
+
+    const columns = [
+        {
+            title: "Vuelo",
+            dataIndex: "flightId",
+            render: (flight: IFlight) => (
+                  <>
+                      {flight.originAirportId.cityId.city} <ArrowRightOutlined /> {flight.destinationAirportId.cityId.city}
+                  </>
+              ),
+              onHeaderCell: () => ({
+                style: { backgroundColor: 'black', color: 'white' },
+              }),
+        },
+        {
+            title: "Fecha del Vuelo",
+            dataIndex: ["flightId", "departureDate"],
+            render: (date: string) => parseDate(date),
+            onHeaderCell: () => ({
+                style: { backgroundColor: 'black', color: 'white' },
+              }),
+        },
+        {
+            title: "Asientos Reservados",
+            dataIndex: "numberOfPassengers",
+            onHeaderCell: () => ({
+                style: { backgroundColor: 'black', color: 'white' },
+              }),
+        },
+        {
+            title: "Estado",
+            dataIndex: "status",
+            onHeaderCell: () => ({
+                style: { backgroundColor: 'black', color: 'white' },
+              }),
+        },
+        {
+            title: "Acciones",
+            render: (_: any, record: IReservation) => {
+                const currentDate = new Date();
+                const departureDate = record.flightId?.departureDate
+                    ? new Date(parseInt(record.flightId.departureDate.match(/\d+/)?.[0] || "0", 10))
+                    : null;
+                const isBeforeDeparture = departureDate && currentDate < departureDate;
+
+                return (
+                    <Space size="middle">
+                        {record.status === "Reservado" && isBeforeDeparture && (
+                            <>
+                                <Button
+                                    icon={<EditOutlined />}
+                                    onClick={() => handleModify(record.reservationId)}
+                                />
+                                <Button
+                                    icon={<DeleteOutlined />}
+                                    danger
+                                    onClick={() => handleCancel(record.reservationId)}
+                                />
+                            </>
+                        )}
+                        <Button
+                            icon={<InfoCircleOutlined />}
+                            onClick={() => showFlightInfo(record)}
+                        />
+                    </Space>
+                );
+            },
+            onHeaderCell: () => ({
+                style: { backgroundColor: 'black', color: 'white' },
+              }),
+        },
+    ];
 
     return (
         <div className="reservation-history">
-            <h2 className="title">Historial de Reservas</h2>
-            <table className="reservations-table">
-                <thead>
-                    <tr>
-                        <th>Vuelo</th>
-                        <th>Fecha</th>
-                        <th>Asientos</th>
-                        <th>Total</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {reservations.map((reservation) => (
-                        <tr key={reservation.id}>
-                            <td>{reservation.flight}</td>
-                            <td>{reservation.date}</td>
-                            <td>{reservation.seats}</td>
-                            <td>${reservation.total.toFixed(2)}</td>
-                            <td>{reservation.status === "completed" ? "Completada" : "Activa"}</td>
-                            <td>
-                                {reservation.status === "active" && (
-                                    <>
-                                        <button
-                                            className="btn btn-modify"
-                                            onClick={() => handleModify(reservation.id)}
-                                        >
-                                            Modificar
-                                        </button>
-                                        <button
-                                            className="btn btn-cancel"
-                                            onClick={() => handleCancel(reservation.id)}
-                                        >
-                                            Cancelar
-                                        </button>
-                                    </>
-                                )}
-                                {reservation.status === "completed" && (
-                                    <span className="no-actions">-</span>
-                                )}
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <Title level={2}>Historial de Reservas</Title>
+            <Table
+                columns={columns}
+                dataSource={reservations}
+                rowKey="reservationId"
+                pagination={false}
+            />
+
+            <Modal
+                title="Modificar Reserva"
+                visible={editModalVisible}
+                onCancel={() => setEditModalVisible(false)}
+                onOk={() => form.submit()}
+            >
+                <Form form={form} onFinish={submitModify} layout="vertical">
+                    <Form.Item
+                        label="Cantidad de asientos"
+                        name="seats"
+                        rules={[{ required: true, message: "Por favor, ingrese la cantidad de asientos." }]}
+                    >
+                        <InputNumber min={1} style={{ width: "100%" }} />
+                    </Form.Item>
+                </Form>
+            </Modal>
+
+            <Modal
+                title="Confirmar Cancelación"
+                visible={cancelModalVisible}
+                onCancel={() => setCancelModalVisible(false)}
+                onOk={confirmCancel}
+                okText="Confirmar"
+                okButtonProps={{ danger: true }}
+            >
+                <p>¿Está seguro de que desea cancelar esta reserva?</p>
+            </Modal>
+
+            <Modal
+                title="Información del Vuelo"
+                visible={isModalVisible}
+                onCancel={handleCloseModal}
+                footer={null}
+            >
+                {selectedReservation && (
+                    <div>
+                        <Divider>
+                            <CompassOutlined /> Detalles del Vuelo
+                        </Divider>
+                        <p>
+                            <strong>Aerolínea:</strong> {selectedReservation.flightId.airlineId.airline}
+                        </p>
+                        <p>
+                            <strong>Clase:</strong> {selectedReservation.flightId.type}
+                        </p>
+                        <p>
+                            <CalendarOutlined style={{ marginRight: 8 }} />
+                            <strong>Fecha de salida:</strong> {parseDate(selectedReservation.flightId.departureDate)}
+                        </p>
+                        <p>
+                            <CalendarOutlined style={{ marginRight: 8 }} />
+                            <strong>Fecha de llegada:</strong> {parseDate(selectedReservation.flightId.arrivalDate)}
+                        </p>
+                        <Divider>
+                            <CompassOutlined /> Ruta
+                        </Divider>
+                        <p>
+                            <strong>Origen:</strong> {selectedReservation.flightId.originAirportId.airport} (
+                            {selectedReservation.flightId.originAirportId.cityId.city})
+                        </p>
+                        <p>
+                            <strong>Destino:</strong> {selectedReservation.flightId.destinationAirportId.airport} (
+                            {selectedReservation.flightId.destinationAirportId.cityId.city})
+                        </p>
+                        <p>
+                            <strong>Escalas:</strong> {selectedReservation.flightId.scales}
+                        </p>
+                        <Divider>
+                            <DollarCircleOutlined /> Información Económica
+                        </Divider>
+                        <p>
+                            <strong>Precio de Asiento:</strong> ${selectedReservation.flightId.price}
+                        </p>
+                        <p>
+                            <strong>Asientos Reservados:</strong> {selectedReservation.numberOfPassengers}
+                        </p>
+                        <p>    
+                            <strong>Total:</strong> ${selectedReservation.flightId.price * (selectedReservation?.numberOfPassengers || 0)}
+                        </p>
+                    </div>
+                )}
+            </Modal>
         </div>
     );
 };
 
 export default ReservationHistory;
-
-
-
