@@ -46,6 +46,18 @@ const RegistroCliente: React.FC = () => {
     }
   };
 
+  const onlyNumbers = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!/\d/.test(event.key)) {
+      event.preventDefault();
+    }
+  };
+
+  const onlyLetters = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]$/.test(event.key)) {
+      event.preventDefault();
+    }
+  };
+
   return (
     <div style={{ maxWidth: 600, margin: '0 auto', padding: '20px', position: 'relative' }}>
       <ArrowLeftOutlined
@@ -79,7 +91,11 @@ const RegistroCliente: React.FC = () => {
                 name="dni"
                 rules={[{ required: true, message: 'Por favor, introduce el DNI.' }]}
               >
-                <Input maxLength={20} placeholder="Introduce tu DNI" />
+                <Input 
+                  maxLength={20} 
+                  placeholder="Introduce tu DNI" 
+                  onKeyPress={onlyNumbers} 
+                />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -88,7 +104,11 @@ const RegistroCliente: React.FC = () => {
                 name="firstName"
                 rules={[{ required: true, message: 'Por favor, introduce tu nombre.' }]}
               >
-                <Input maxLength={50} placeholder="Introduce tu nombre" />
+                <Input 
+                  maxLength={50} 
+                  placeholder="Introduce tu nombre" 
+                  onKeyPress={onlyLetters} 
+                />
               </Form.Item>
             </Col>
           </Row>
@@ -100,7 +120,11 @@ const RegistroCliente: React.FC = () => {
                 name="lastName"
                 rules={[{ required: true, message: 'Por favor, introduce tu apellido.' }]}
               >
-                <Input maxLength={50} placeholder="Introduce tu apellido" />
+                <Input 
+                  maxLength={50} 
+                  placeholder="Introduce tu apellido" 
+                  onKeyPress={onlyLetters} 
+                />
               </Form.Item>
             </Col>
             <Col span={12}>

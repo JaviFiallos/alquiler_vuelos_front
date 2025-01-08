@@ -38,7 +38,7 @@ const Login: React.FC = () => {
                 }
             }
 
-            message.success('Inicio de sesión exitoso!');
+            message.success('¡Inicio de sesión exitoso!');
         } catch (error) {
             console.error('Error al iniciar sesión:', error);
             message.error('Correo o contraseña incorrectos. Intenta de nuevo.');
@@ -51,8 +51,8 @@ const Login: React.FC = () => {
         <div className="login-container">
             <div className="login-form">
                 <div className="header-text">
-                    <h2>Hello!</h2>
-                    <p>Sign into Your account</p>
+                    <h2>¡Hola!</h2>
+                    <p>Inicia sesión en tu cuenta</p>
                 </div>
 
                 <Form
@@ -61,31 +61,31 @@ const Login: React.FC = () => {
                     initialValues={{ email: '', password: '' }}
                 >
                     <Form.Item
-                        label="E-mail"
+                        label="Correo electrónico"
                         name="email"
                         rules={[
-                            { required: true, message: 'Por favor ingresa tu correo electrónico!' },
-                            { type: 'email', message: 'El formato del correo es inválido!' },
+                            { required: true, message: '¡Por favor ingresa tu correo electrónico!' },
+                            { type: 'email', message: '¡El formato del correo es inválido!' },
                         ]}
                     >
                         <Input
                             prefix="📧"
-                            placeholder="E-mail"
+                            placeholder="Correo electrónico"
                             size="large"
                         />
                     </Form.Item>
 
                     <Form.Item
-                        label="Password"
+                        label="Contraseña"
                         name="password"
                         rules={[
-                            { required: true, message: 'Por favor ingresa tu contraseña!' },
-                            { min: 6, message: 'La contraseña debe tener al menos 6 caracteres!' },
+                            { required: true, message: '¡Por favor ingresa tu contraseña!' },
+                            { min: 6, message: '¡La contraseña debe tener al menos 6 caracteres!' },
                         ]}
                     >
                         <Input.Password
                             prefix="🔒"
-                            placeholder="Password"
+                            placeholder="Contraseña"
                             size="large"
                             iconRender={(visible) => (
                                 <span onClick={togglePasswordVisibility}>
@@ -103,14 +103,14 @@ const Login: React.FC = () => {
                             size="large"
                             loading={loading}
                         >
-                            {loading ? 'Cargando...' : 'SIGN IN'}
+                            {loading ? 'Cargando...' : 'INICIAR SESIÓN'}
                         </Button>
                     </Form.Item>
                 </Form>
 
                 <div className="register-section">
                     <div className="account-text">
-                        <p>No tienes una cuenta?</p>
+                        <p>¿No tienes una cuenta?</p>
                     </div>
                     <Button
                         type="link"
