@@ -315,6 +315,8 @@ const FlightReservations: React.FC = () => {
         open={isModalOpen}
         onOk={handleModalOk}
         onCancel={handleModalCancel}
+        okText="Continuar"
+        cancelText="Cancelar"
       >
         {selectedFlight && (
           <div style={{ marginBottom: '20px' }}>
@@ -370,13 +372,58 @@ const FlightReservations: React.FC = () => {
 
       {/* Modal de Métodos de Pago */}
       <Modal
-        title="Método de Pago"
+        title="Proceso de Pago"
         open={isPaymentModalOpen}
         onOk={handlePayment}
         onCancel={handlePaymentModalCancel}
         okText="Realizar Pago"
         cancelText="Cancelar"
       >
+        <div style={{ marginBottom: '20px' }}>
+            <Col span={20}>
+                <Text strong>DETALLES: </Text>
+              </Col>
+            <Row>
+              <Col span={12}>
+                <Text strong>Aerolínea:</Text>
+              </Col>
+              <Col span={12}>
+                <Text>{selectedFlight?.airlineId.airline}</Text>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <Text strong>Origen:</Text>
+              </Col>
+              <Col span={12}>
+                <Text>{selectedFlight?.originAirportId.cityId.city}</Text>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <Text strong>Destino:</Text>
+              </Col>
+              <Col span={12}>
+                <Text>{selectedFlight?.destinationAirportId.cityId.city}</Text>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <Text strong>Asientos Reservados:</Text>
+              </Col>
+              <Col span={12}>
+                <Text>{selectedSeats}</Text>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <Text strong>Precio Total:</Text>
+              </Col>
+              <Col span={12}>
+                <Text>${totalPrice!}</Text>
+              </Col>
+            </Row>
+          </div>
         <Form layout="vertical">
           <Form.Item label="Método de Pago">
             <Radio.Group onChange={handlePaymentMethodChange} value={paymentMethod}>

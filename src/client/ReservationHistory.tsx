@@ -27,7 +27,7 @@ const ReservationHistory: React.FC = () => {
     const [selectedReservation, setSelectedReservation] = useState<IReservation | null>(null);
     const [editModalVisible, setEditModalVisible] = useState(false);
     const [cancelModalVisible, setCancelModalVisible] = useState(false);
-    const [currentReservationId, setCurrentReservationId] = useState<number | null>(null);
+    const [currentReservationId, setCurrentReservationId] = useState<IReservation | null>(null);
     const [form] = Form.useForm();
 
     const fetchReservations = async () => {
@@ -43,20 +43,25 @@ const ReservationHistory: React.FC = () => {
         fetchReservations();
     }, []);
 
-    const handleModify = (id: number) => {
+    const handleModify = (id: IReservation) => {
         setCurrentReservationId(id);
         setEditModalVisible(true);
     };
 
-    const handleCancel = (id: number) => {
+    const handleCancel = (id: IReservation) => {
         setCurrentReservationId(id);
         setCancelModalVisible(true);
     };
 
     const submitModify = async (values: { seats: number }) => {
         if (currentReservationId) {
+            if(values.seats > currentReservationId.flightId.availableSeats){
+                message.error("No existen suficientes asientos disponibles");
+                return;
+            }
+
             try {
-                await updateReservation(currentReservationId, { numberOfPassengers: values.seats });
+                await updateReservation(currentReservationId.reservationId, { numberOfPassengers: values.seats });
                 message.success("Reserva modificada con éxito.");
                 fetchReservations();
                 setEditModalVisible(false);
@@ -70,7 +75,7 @@ const ReservationHistory: React.FC = () => {
     const confirmCancel = async () => {
         if (currentReservationId) {
             try {
-                await cancelReservation(currentReservationId);
+                await cancelReservation(currentReservationId.reservationId);
                 message.success("Reserva cancelada con éxito.");
                 fetchReservations();
                 setCancelModalVisible(false);
@@ -141,12 +146,12 @@ const ReservationHistory: React.FC = () => {
                             <>
                                 <Button
                                     icon={<EditOutlined />}
-                                    onClick={() => handleModify(record.reservationId)}
+                                    onClick={() => handleModify(record)}
                                 />
                                 <Button
                                     icon={<DeleteOutlined />}
                                     danger
-                                    onClick={() => handleCancel(record.reservationId)}
+                                    onClick={() => handleCancel(record)}
                                 />
                             </>
                         )}

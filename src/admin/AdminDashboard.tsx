@@ -1,7 +1,7 @@
 import React from "react";
-import { Route, Routes, Link, useLocation } from "react-router-dom";
-import { Layout, Menu, Breadcrumb } from "antd";
-import { EditOutlined, FileSearchOutlined } from "@ant-design/icons";
+import { Route, Routes, Link, useLocation, useNavigate } from "react-router-dom";
+import { Layout, Menu, Breadcrumb, Button } from "antd";
+import { EditOutlined, FileSearchOutlined, LogoutOutlined } from "@ant-design/icons";
 import FlightsManagement from "./FlightsManagement";
 import AirlinesCreation from "./AirlinesCreation";
 import ReservationsView from "./ReservationsView";
@@ -10,6 +10,7 @@ const { Header, Content, Sider } = Layout;
 
 const AdminDashboard: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   // Definir las rutas para la navegación
   const menuItems = [
@@ -17,6 +18,12 @@ const AdminDashboard: React.FC = () => {
     { key: "airlines", label: "Creación de Aerolíneas", to: "/admin/airlines" },
     { key: "reservations", icon: <FileSearchOutlined />, label: "Visualización de Reservas", to: "/admin/reservations" },
   ];
+
+  // Función de cierre de sesión
+  const handleLogout = () => {
+    localStorage.removeItem("authToken"); // Eliminar el token del localStorage
+    navigate("/"); // Redirigir al login
+  };
 
   return (
     <Layout className="admin-dashboard">
@@ -63,6 +70,12 @@ const AdminDashboard: React.FC = () => {
                 </Link>
               </Menu.Item>
             ))}
+            {/* Mover el botón de cerrar sesión al final */}
+            <Menu.Item key="logout" icon={<LogoutOutlined />} style={{ marginTop: "auto", color: "#fff" }}>
+              <Button type="link" onClick={handleLogout} style={{ color: "#fff", width: "100%" }}>
+                Cerrar Sesión
+              </Button>
+            </Menu.Item>
           </Menu>
         </Sider>
         <Layout style={{ padding: "0 24px 24px", marginLeft: 200 }}> {/* Ajuste para no sobreponerse al Sider */}

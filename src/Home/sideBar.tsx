@@ -20,7 +20,6 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
   const menuOptions = [
     { key: 'catalogo', label: 'Catálogo', icon: <HomeOutlined />, route: '/home' },
     { key: 'reservas', label: 'Reservas', icon: <RocketOutlined />, route: '/reservation-history' },
-    { key: 'adicional', label: 'Adicional', icon: <KeyOutlined />, route: '/adicional' },
   ];
 
   const handleMenuClick = (route: string) => {
