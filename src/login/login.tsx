@@ -1,57 +1,124 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './style.css'; 
+import { Form, Input, Button, message } from 'antd';
+import { login } from '../services/auth.service';
+import { getUserId, getUserRole } from '../utils/utils';
+import './style.css';
 
 const Login: React.FC = () => {
     const [showPassword, setShowPassword] = useState(false);
-    const navigate = useNavigate();  // Inicializar el hook navigate
+    const [loading, setLoading] = useState(false);  // Estado de carga
+    const navigate = useNavigate();
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
 
     const handleRegisterClick = () => {
-        navigate('/register');  // Redirige a la ruta /register
-      };
+        navigate('/register');
+    };
+
+    const handleLogin = async (values: { email: string; password: string }) => {
+        const { email, password } = values;
+
+        setLoading(true);  // Empieza el proceso de carga
+
+        try {
+            const response = await login({ email, password });
+            localStorage.setItem('authToken', response);
+            console.log('Inicio de sesión exitoso:', response);
+
+            if (getUserId() != null) {
+                if (getUserRole() == 2) {
+                    navigate("/home");
+                } else if (getUserRole() == 1) {
+                    navigate("/admin");
+                } else{
+                    navigate("/")
+                }
+            }
+
+            message.success('¡Inicio de sesión exitoso!');
+        } catch (error) {
+            console.error('Error al iniciar sesión:', error);
+            message.error('Correo o contraseña incorrectos. Intenta de nuevo.');
+        } finally {
+            setLoading(false);  // Termina el proceso de carga
+        }
+    };
 
     return (
         <div className="login-container">
             <div className="login-form">
                 <div className="header-text">
-                    <h2>Hello!</h2>
-                    <p>Sign into Your account</p>
+                    <h2>¡Hola!</h2>
+                    <p>Inicia sesión en tu cuenta</p>
                 </div>
-                <form action="#">
-                    <div className="input-group">
-                        <span className="icon">📧</span>
-                        <input type="email" placeholder="E-mail" required />
-                    </div>
-                    <div className="input-group">
-                        <span className="icon">🔒</span>
-                        <input
-                            type={showPassword ? 'text' : 'password'}
-                            placeholder="Password"
-                            required
+
+                <Form
+                    onFinish={handleLogin}  // El formulario usa onFinish para manejar el submit
+                    layout="vertical"  // Usamos un layout vertical
+                    initialValues={{ email: '', password: '' }}
+                >
+                    <Form.Item
+                        label="Correo electrónico"
+                        name="email"
+                        rules={[
+                            { required: true, message: '¡Por favor ingresa tu correo electrónico!' },
+                            { type: 'email', message: '¡El formato del correo es inválido!' },
+                        ]}
+                    >
+                        <Input
+                            prefix="📧"
+                            placeholder="Correo electrónico"
+                            size="large"
                         />
-                        <span
-                            className="show-password"
-                            onClick={togglePasswordVisibility}
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Contraseña"
+                        name="password"
+                        rules={[
+                            { required: true, message: '¡Por favor ingresa tu contraseña!' },
+                            { min: 6, message: '¡La contraseña debe tener al menos 6 caracteres!' },
+                        ]}
+                    >
+                        <Input.Password
+                            prefix="🔒"
+                            placeholder="Contraseña"
+                            size="large"
+                            iconRender={(visible) => (
+                                <span onClick={togglePasswordVisibility}>
+                                    {visible ? '👁️' : '👁️'}
+                                </span>
+                            )}
+                        />
+                    </Form.Item>
+
+                    <Form.Item>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            block
+                            size="large"
+                            loading={loading}
                         >
-                            👁️
-                        </span>
-                    </div>
-                    <button type="submit" className="sign-in-button">
-                        SIGN IN
-                    </button>
-                </form>
+                            {loading ? 'Cargando...' : 'INICIAR SESIÓN'}
+                        </Button>
+                    </Form.Item>
+                </Form>
+
                 <div className="register-section">
-                    <div className='account-text'><p>No tienes una cuenta?</p></div>
-
-                    <button className="register-button" onClick={handleRegisterClick}>
+                    <div className="account-text">
+                        <p>¿No tienes una cuenta?</p>
+                    </div>
+                    <Button
+                        type="link"
+                        onClick={handleRegisterClick}
+                    >
                         Registrarse
-                    </button>
+                    </Button>
                 </div>
-
             </div>
             <div
                 className="welcome-section"

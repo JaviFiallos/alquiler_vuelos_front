@@ -1,0 +1,168 @@
+/* FlightsManagement.css */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  body {
+    background-color: #f4f7fa;
+    display: flex;
+    height: 100vh;
+    width: 100%
+  }
+  
+  .flights-management {
+    width: 100%;
+    max-width: 1200px;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .title {
+    text-align: center;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .btn {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .btn-close {
+    background-color: #dc3545;
+    color: #fff;
+    padding: 8px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+  
+  .btn-close:hover {
+    background-color: #c82333;
+  }
+  
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    width: 500px;
+  }
+  
+  .flight-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .input-field {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .input-field:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  .flights-table {
+    width: 100%;
+    margin-top: 30px;
+    border-collapse: collapse;
+    font-size: 1rem;
+  }
+  
+  .flights-table th, .flights-table td {
+    padding: 12px;
+    text-align: left;
+  }
+  
+  .flights-table th {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .flights-table td {
+    background-color: #f9f9f9;
+  }
+  
+  .flights-table tr:nth-child(even) td {
+    background-color: #f1f1f1;
+  }
+  
+  .flights-table button {
+    padding: 6px 12px;
+    margin-right: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .flights-table .btn-edit {
+    background-color: #28a745;
+    color: #fff;
+  }
+  
+  .flights-table .btn-edit:hover {
+    background-color: #218838;
+  }
+  
+  .flights-table .btn-delete {
+    background-color: #dc3545;
+    color: #fff;
+  }
+  
+  .flights-table .btn-delete:hover {
+    background-color: #c82333;
+  }
+  
+  @media (max-width: 768px) {
+    .flights-management {
+      padding: 20px;
+    }
+  
+    .modal-content {
+      width: 90%;
+    }
+  
+    .flights-table th, .flights-table td {
+      padding: 8px;
+    }
+  }
+  

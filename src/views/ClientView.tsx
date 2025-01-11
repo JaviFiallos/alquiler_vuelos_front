@@ -1,15 +1,31 @@
 import React, { useState } from "react";
 import { Container, Grid, Typography } from "@mui/material";
 import CitiesSearch from "../components/CitiesSearch";
-import AirportsList from "../components/AirportsList";
 import FlightsList from "../components/FlightsList";
+import { ICity } from "../types/ICity";
 
-const ClientView = () => {
-  const [selectedOriginCity, setSelectedOriginCity] = useState(null);
-  const [selectedDestinationCity, setSelectedDestinationCity] = useState(null);
-  const [flights, setFlights] = useState([]);
+interface Flight {
+  flightId: number;
+  airline: string;
+  originAirportId: number;
+  destinationAirportId: number;
+  departureDate: string;
+  arrivalDate: string;
+  price: number;
+}
 
-  const allFlights = [
+interface Airport {
+  airportId: number;
+  airport: string;
+  cityId: number;
+}
+
+const ClientView: React.FC = () => {
+  const [selectedOriginCity, setSelectedOriginCity] = useState<ICity | null>(null);
+  const [selectedDestinationCity, setSelectedDestinationCity] = useState<ICity | null>(null);
+  const [flights] = useState<Flight[]>([]);
+
+  const allFlights: Flight[] = [
     {
       flightId: 1,
       airline: "LATAM Airlines",
@@ -30,8 +46,7 @@ const ClientView = () => {
     },
   ];
 
-  // Simulación de aeropuertos
-  const airports = [
+  const airports: Airport[] = [
     { airportId: 1, airport: "Mariscal Sucre", cityId: 1 },
     { airportId: 2, airport: "José Joaquín de Olmedo", cityId: 1 },
     { airportId: 3, airport: "Aeropuerto El Dorado", cityId: 2 },
@@ -39,15 +54,20 @@ const ClientView = () => {
   ];
 
   // Filtrar vuelos por las ciudades de origen y destino seleccionadas
-  const getFilteredFlights = () => {
+  const getFilteredFlights = (): Flight[] => {
     if (!selectedOriginCity || !selectedDestinationCity) return [];
 
-    const originAirports = airports.filter((airport) => airport.cityId === selectedOriginCity.cityId);
-    const destinationAirports = airports.filter((airport) => airport.cityId === selectedDestinationCity.cityId);
+    const originAirports = airports.filter(
+      (airport) => airport.cityId === selectedOriginCity.cityId
+    );
+    const destinationAirports = airports.filter(
+      (airport) => airport.cityId === selectedDestinationCity.cityId
+    );
 
-    return allFlights.filter((flight) =>
-      originAirports.some((airport) => airport.airportId === flight.originAirportId) &&
-      destinationAirports.some((airport) => airport.airportId === flight.destinationAirportId)
+    return allFlights.filter(
+      (flight) =>
+        originAirports.some((airport) => airport.airportId === flight.originAirportId) &&
+        destinationAirports.some((airport) => airport.airportId === flight.destinationAirportId)
     );
   };
 
@@ -64,7 +84,7 @@ const ClientView = () => {
         <Grid item xs={12} md={6}>
           <CitiesSearch
             label="Select Origin City"
-            onCitySelect={(city) => setSelectedOriginCity(city)}
+            onCitySelect={(city: ICity) => setSelectedOriginCity(city)}
           />
         </Grid>
 
@@ -72,7 +92,7 @@ const ClientView = () => {
         <Grid item xs={12} md={6}>
           <CitiesSearch
             label="Select Destination City"
-            onCitySelect={(city) => setSelectedDestinationCity(city)}
+            onCitySelect={(city: ICity) => setSelectedDestinationCity(city)}
           />
         </Grid>
 
