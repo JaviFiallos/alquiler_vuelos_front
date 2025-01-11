@@ -1,0 +1,48 @@
+.reservations-view {
+    font-family: Arial, sans-serif;
+    padding: 1rem;
+    background-color: #f9f9f9;
+}
+
+.title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.reservations-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.reservations-table th,
+.reservations-table td {
+    border: 1px solid #ddd;
+    padding: 0.5rem;
+    text-align: left;
+}
+
+.reservations-table th {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.reservations-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #c82333;
+}
